@@ -1,1 +1,0 @@
-<!-- Show all invoices in one table also add few filters such as payment method etc    -->

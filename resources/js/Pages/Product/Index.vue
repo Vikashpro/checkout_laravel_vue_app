@@ -77,7 +77,7 @@
       </div>
     </Box>
     <Box>
-        <div class="grid grid-cols-3 divide-x">
+        <div class="grid grid-cols-3 ">
         <div>
         </div>
         <div class="text-center">
@@ -88,13 +88,48 @@
         </div>
       </div>
     </Box>
+    
       </div>
+      <div class="">
+      <button type="button" class="text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-600 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 mr-2 mb-2">
+  Pay with Debit Card/Credit Card
+</button>
+      </div>
+    
+   
+  
   </template>
   
+   
+  
   <script setup>
-  import Box from '@/Components/UI/Box.vue'
-  defineProps({
-      products: Array,
-  })
-  </script>
+import Box from '@/Components/UI/Box.vue'
+
+import { ref, reactive,   computed} from 'vue';
+const props = defineProps({
+  products: Array,
+})
+const lead = {};
+
+const isLead = ref(false);
+
+const storeData = () => {
+  // sessionStorage.setItem('lead', .value);
+  // sessionStorage.setItem('product', JSON.stringify(product.value));
+  // name.value = nameInput.value;
+  // nameInput.value = '';
+};
+
+computed(() => {
+  const lead = sessionStorage.getItem('lead');
+  console.log("lead");
+  if(lead == null){
+    console.log("lead isnull")
+  }
+})
+
+
+
+</script>
+
   

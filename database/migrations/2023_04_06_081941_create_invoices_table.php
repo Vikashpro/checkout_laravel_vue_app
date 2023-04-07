@@ -14,19 +14,20 @@ return new class extends Migration
         Schema::create('invoices', function (Blueprint $table) {
             $table->increments('invoice_no');
             $table->string('client_name');
-            $table->string('company');
+            $table->string('company')->nullable();
             $table->string('email');
             $table->string('phone');
-            $table->unsignedSmallInteger('no_of_items');
-            $table->unsignedSmallInteger('sub_total');
-            $table->unsignedSmallInteger('discount');
-            $table->unsignedSmallInteger('tax');
-            $table->unsignedSmallInteger('payment_surcharge');
-            $table->unsignedSmallInteger('total');
-            $table->unsignedSmallInteger('paid_amount');
-            $table->unsignedSmallInteger('payment_method');
-            $table->unsignedSmallInteger('payment_details');
-            $table->unsignedSmallInteger('payment_status');
+            $table->string('address')->nullable();            
+            $table->unsignedSmallInteger('no_of_items')->nullable();
+            $table->unsignedSmallInteger('sub_total')->nullable();
+            $table->unsignedSmallInteger('discount')->nullable();
+            $table->unsignedSmallInteger('tax')->nullable();
+            $table->unsignedSmallInteger('payment_surcharge')->nullable();
+            $table->unsignedSmallInteger('total')->nullable();
+            $table->unsignedSmallInteger('paid_amount')->nullable();
+            $table->unsignedSmallInteger('payment_method')->nullable();
+            $table->unsignedSmallInteger('payment_details')->nullable();
+            $table->unsignedSmallInteger('payment_status')->nullable();
             $table->timestamps();
         });
     }

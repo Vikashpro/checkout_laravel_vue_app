@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Invoice;
 use Illuminate\Http\Request;
 
 class InvoiceController extends Controller
@@ -20,6 +20,7 @@ class InvoiceController extends Controller
     public function create()
     {
         //
+        return inertia('Invoice/Create');
     }
 
     /**
@@ -28,6 +29,20 @@ class InvoiceController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate([
+            'client_name' => 'required',
+            'email' => 'required|email',
+            'phone' => 'required',
+        ]);
+        $invoice = new Invoice();
+        $invoice->client_name = $request->client_name;
+        $invoice->company = $request->company;
+        $invoice->email = $request->email;
+        $invoice->phone = $request->phone;
+        $invoice->address = $request->address;
+        $invoice->save();
+        // response()->json(['message' => 'Data saved successfully', 'invoice'=>$invoice]);
+         return  inertia('Invoice/Create',['invoice'=>$invoice])->with('success','its done');
     }
 
     /**

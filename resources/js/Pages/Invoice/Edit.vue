@@ -1,1 +1,0 @@
-<!-- edit the invoice also the status of the invoice to paid etc -->

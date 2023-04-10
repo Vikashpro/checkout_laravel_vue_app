@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Models\DiscountCoupon;
+use Carbon\Carbon;
+use Inertia\Inertia;
 class DiscountController extends Controller
 {
     /**
@@ -33,9 +35,19 @@ class DiscountController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Request $request)
     {
         //
+        $discountCoupon = DiscountCoupon::where('coupon', $request->coupon)->where('validity', '>', Carbon::now())->first();
+
+if ($discountCoupon) {
+
+    $discountPrice = $discountCoupon->discount;
+} else {
+    $discountPrice = 0;
+}
+
+        return response()->json(["discount"=>$discountPrice]);
     }
 
     /**
@@ -44,6 +56,7 @@ class DiscountController extends Controller
     public function edit(string $id)
     {
         //
+
     }
 
     /**

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\DiscountController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,4 +17,6 @@ use App\Http\Controllers\InvoiceController;
 */
 
 Route::get('/', [ProductController::class, 'index']);
-Route::resource('/invoice', InvoiceController::class)->only(['create','store']);
+Route::post('/coupon', [DiscountController::class, 'show']);
+Route::post('/invoice/store', [InvoiceController::class, 'store']);
+Route::post('/updateInvoiceDetail', [InvoiceController::class,'updateInvoiceDetail']);

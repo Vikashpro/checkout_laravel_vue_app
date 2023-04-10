@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 use App\Models\Invoice;
+use App\Models\InvoiceDetail;
 use Illuminate\Http\Request;
-
+use App\Models\Product;
 class InvoiceController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+
+    
     public function index()
     {
         //
@@ -42,7 +45,8 @@ class InvoiceController extends Controller
         $invoice->address = $request->address;
         $invoice->save();
         // response()->json(['message' => 'Data saved successfully', 'invoice'=>$invoice]);
-         return  inertia('Invoice/Create',['invoice'=>$invoice])->with('success','its done');
+        // return response()->json(['id' => $invoice->id]);
+          return  inertia('Product/Index',['invoice'=>$invoice, 'products'=>Product::all()])->with('success','Lead added Successfully');
     }
 
     /**
@@ -68,6 +72,35 @@ class InvoiceController extends Controller
     {
         //
     }
+    public function updateInvoiceDetail(Request $request)
+    {
+        $invoice_id = $request->invoice_id;
+        $product_id = $request->product_id;
+        $quantity = $request->quantity;
+        $price = $request->price;
+    
+        $record = InvoiceDetail::where('invoice_id', $invoice_id)
+                         ->where('product_id', $product_id)
+                         ->first();
+        
+        if (is_null($record)) {
+            // create new record
+            InvoiceDetail::create([
+                'invoice_id' => $invoice_id,
+                'product_id' => $product_id,
+                'quantity' => $quantity,
+                'price' => $price,
+            ]);
+
+        } else {
+            // update existing record
+            $record->quantity = $quantity;
+            $record->price = $price;
+            $record->save();
+        }
+        return response()->json(["message"=>"quantity with price update successfully"]);
+    }
+   
 
     /**
      * Remove the specified resource from storage.

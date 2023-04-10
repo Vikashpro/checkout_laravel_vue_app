@@ -1,6 +1,8 @@
 <template>
     <form @submit.prevent="create">
+        <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl mb-6 sm:tracking-tight">Personal Information</h2>
       <div class="grid grid-cols-6 gap-4">
+        
         <div class="col-span-6">
         <label class="block mb-1 text-gray-500 dark:text-gray-300 font-medium">Full Name</label>
         <input v-model="form.client_name" type="text" class="block w-full p-2 rounded-md shadow-sm border border-gray-300 dark:border-gray-600 text-gray-500" />
@@ -38,11 +40,8 @@
     </form>
   </template>
     <script setup>
-    import {computed,watch } from 'vue'
-    import { useForm, usePage } from '@inertiajs/inertia-vue3'
-    const props = defineProps({
-  invoice: Object,
-})
+    import { useForm, } from '@inertiajs/inertia-vue3'
+   
     const form = useForm({
      client_name: null,
       company:null,
@@ -51,32 +50,21 @@
       address: null,
 
     })
-    const page = usePage()
-    computed(() =>
-        console.log(form)
-    )
-    //page.props.value.flash.success
-    // const create = () => form.post('/invoice')
-    const create = async () => {
-  await form.post('/invoice')
-//   const invoice = page.props.invoice
-//   window.sessionStorage.setItem('invoice', JSON.stringify(invoice))
-//   console.log(invoice)
-saveInvoiceToSession.value
 
+    const create = () => form.post('/invoice/store',{
+        preserveState:true
+    })
+//     const create = async () => {
+//   await form.post('/invoice')
 
-}
-const saveInvoiceToSession = computed(() => {
+// }
 
-  if (props.invoice) {
-    const invoice = props.invoice
-    window.sessionStorage.setItem('invoice', JSON.stringify(invoice))
-    console.log(invoice.id)
-  }
-})
-watch(() => props.invoice, () => {
-    saveInvoiceToSession.value
-  })
+// $inertia.post('/submit-form', form)
+//         .then(response => {
+//           // Redirect back to the page with props, including the inserted ID
+//         console.log(response);
+//         });
+
    
 
     </script>

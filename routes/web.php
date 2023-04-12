@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\DiscountController;
+use App\Http\Controllers\StripeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,4 +20,10 @@ use App\Http\Controllers\DiscountController;
 Route::get('/', [ProductController::class, 'index']);
 Route::post('/coupon', [DiscountController::class, 'show']);
 Route::post('/invoice/store', [InvoiceController::class, 'store']);
-Route::post('/updateInvoiceDetail', [InvoiceController::class,'updateInvoiceDetail']);
+Route::post('/update_invoice_detail', [InvoiceController::class,'updateInvoiceDetail']);
+Route::post('/update_invoice', [InvoiceController::class,'updateInvoice']);
+Route::post('/update_lead', [InvoiceController::class,'updateInvoiceLead']);
+//Stripe payment method integration
+Route::post('payment/initiate', [StripeController::class, 'initiatePayment']);
+Route::post('payment/complete', [StripeController::class, 'completePayment']);
+

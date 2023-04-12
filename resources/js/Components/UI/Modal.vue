@@ -1,11 +1,3 @@
-<script>
-export default {
-  props: {
-    show: Boolean
-  }
-}
-</script>
-
 <template>
   <Transition name="modal">
     <div v-if="show" class="modal-mask">
@@ -19,7 +11,13 @@ export default {
    
   </Transition>
 </template>
-
+<script>
+export default {
+  props: {
+    show: Boolean
+  }
+}
+</script>
 <style>
 .modal-mask {
   position: fixed;
@@ -34,7 +32,7 @@ export default {
 }
 
 .modal-container {
-  width: 700px;
+  width: 500px;
   margin: auto;
   padding: 20px 30px;
   background-color: #fff;

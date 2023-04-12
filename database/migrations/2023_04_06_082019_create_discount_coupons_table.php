@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('coupon');
             $table->unsignedSmallInteger('discount');
+            $table->string('type');
             $table->date('validity');
             $table->timestamps();
         });

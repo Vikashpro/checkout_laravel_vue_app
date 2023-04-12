@@ -54,18 +54,7 @@
     const create = () => form.post('/invoice/store',{
         preserveState:true
     })
-//     const create = async () => {
-//   await form.post('/invoice')
 
-// }
-
-// $inertia.post('/submit-form', form)
-//         .then(response => {
-//           // Redirect back to the page with props, including the inserted ID
-//         console.log(response);
-//         });
-
-   
 
     </script>
     

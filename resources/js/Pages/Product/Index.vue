@@ -11,7 +11,7 @@
           <h3 class="text-base font-semibold leading-6 text-gray-900">Course Name</h3>
         </div>
         <div class="text-center">
-          <h3 class="text-base font-semibold leading-6 text-gray-900">No of Users</h3>
+          <h3 class="text-base font-semibold leading-6 text-gray-900">No. of Users</h3>
       </div>
 
         <div class="text-center">
@@ -58,11 +58,11 @@
         <div>
         </div>
         <div class="text-center">
-          <h3 class="text-base font-semibold leading-6 text-gray-900">Discount</h3>
+          <h3 class="text-base font-semibold leading-6 text-gray-900">Discount <span v-if="discountType=='percent'">({{ discount }}%)</span></h3>
       </div>
 
         <div class="text-center">
-          <h3 class="text-base font-semibold leading-6 text-gray-900">${{ discount }}</h3>
+          <h3 class="text-base font-semibold leading-6 text-gray-900">${{ discountAmount }}</h3>
         </div>
       </div>
     </Box>
@@ -97,7 +97,7 @@
         <div>
         </div>
         <div class="text-center">
-          <h3 class="text-base font-semibold leading-6 text-gray-900">Total Amount</h3>
+          <h3 class="text-base font-semibold leading-6 text-gray-900">Total Amount CAD</h3>
       </div>
         <div class="text-center">
           <h3 class="text-base font-semibold leading-6 text-gray-900">${{ totalAmount }}</h3>
@@ -115,29 +115,46 @@
           <label for="bordered-radio-1" class="w-full py-4 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Pay with Credit, Debit</label>
         </div>
       <div class="flex items-center pl-4 border border-gray-200 rounded dark:border-gray-700">
-    <input  id="bordered-radio-2" type="radio" value="e" v-model="paymentMethod"  @change="changePaymentMethod" name="bordered-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+    <input   id="bordered-radio-2" type="radio" value="E Transfer" v-model="paymentMethod"  @change="changePaymentMethod" name="bordered-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
     <label for="bordered-radio-2" class="w-full py-4 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Pay With Interac E-Transfer</label>
 </div>
-        <button type="submit" class="mt-4 btn-primary">Proceed Payment</button>
+
+        <button @click="showPaymentModal=true" class="btn-primary" >Proceed<span v-if="paymentMethod=='card'"> to Payment</span></button>
        </Box>
       <Box>
         <h3 class="text-base font-semibold leading-6 text-gray-900">Apply Coupon</h3>
-        <input v-model="coupon" type="text" class="mt-4 block w-full p-2 rounded-md shadow-sm border border-gray-300 dark:border-gray-600 text-gray-500" />
+        <input v-model="coupon" type="text" class="block w-full p-2 rounded-md shadow-sm border border-gray-300 dark:border-gray-600 text-gray-500" />
+        <div v-if="couponError" class="input-error">
+          {{ couponError }}
+        </div>
         <button @click="applyCoupon()" class=" mt-4 btn-primary">Apply</button>
       </Box>
+
      </div>
+
    </div>
+  
      
      
 
 <Teleport to="body">
   <!-- use the modal component, pass in the prop -->
-  <modal :show="showModal" @close="showModal = false">
+  <modal :show="showLeadModal">
     <template #body>
       <InvoiceCreate/>
     </template>
   </modal>
 </Teleport>
+
+<Teleport to="body">
+  <!-- use the modal component, pass in the prop -->
+  <modal :show="showPaymentModal" >
+    <template #body>
+      <Payment :totalAmount="totalAmount" :paymentMethod="paymentMethod" @hide-payment-modal="hidePaymentModal"/>
+    </template>
+  </modal>
+</Teleport>
+
   </template>
   
    
@@ -146,6 +163,7 @@
 import Box from '@/Components/UI/Box.vue'
 import Modal from '@/Components/UI/Modal.vue'
 import InvoiceCreate from '@/Pages/Invoice/Create.vue'
+import Payment from '@/Pages/Payment/Payment.vue'
 
 import { ref, reactive, onMounted, watch,  computed} from 'vue';
 import axios from 'axios';
@@ -161,16 +179,24 @@ const quantity = ref([0,0])
 const price = ref([0,0])
 const subTotal = ref(0)
 const discount = ref(0)
+const discountAmount = ref(0)
+const discountType = ref(null)
+const couponError = ref(null)
 const taxRate = import.meta.env.VITE_MIX_TAX_RATE
 const taxAmount = ref(0)
 const paymentSurchargeRate = ref(import.meta.env.VITE_MIX_PAYMENT_SURCHARGE_RATE)
 const paymentSurchargeAmount = ref(0)
 const totalAmount = ref(0)
 const coupon = ref(null)
-const paymentMethod = ref(null)
+const paymentMethod = ref('card')
+const showLeadModal = ref(false)
+const showPaymentModal = ref(false)
 
 
 
+const hidePaymentModal = () =>{
+ showPaymentModal.value = false
+}
 const subTotalCompute = computed(() => {
 subTotal.value = price.value[0] + price.value[1]
 
@@ -186,23 +212,32 @@ if(paymentMethod.value=='e'){
 console.log("payment " + paymentSurchargeRate.value);
 calculateFuncs.value
 })
+const discountCompute = computed(() => {
+  if(discount.value > 0 && discountType.value=="percent"){
+    discountAmount.value = subTotal.value*discount.value/100
+  }else{
+    discountAmount.value = discount.value
+  }
+})
 const taxCompute = computed(() => {
-taxAmount.value = (subTotal.value - discount.value)*taxRate/100
+taxAmount.value = (subTotal.value - discountAmount.value)*taxRate/100
 })
 
 const paymentSurchargeCompute = computed(() => {
-paymentSurchargeAmount.value = ((subTotal.value - discount.value+ taxAmount.value )*paymentSurchargeRate.value/100).toFixed(2)
+paymentSurchargeAmount.value = ((subTotal.value - discountAmount.value+ taxAmount.value )*paymentSurchargeRate.value/100).toFixed(2)
 })
 
 const totalAmountCompute = computed(() => {
-totalAmount.value = (subTotal.value - discount.value +taxAmount.value+parseFloat(paymentSurchargeAmount.value)).toFixed(2)
+totalAmount.value = (subTotal.value - discountAmount.value +taxAmount.value+parseFloat(paymentSurchargeAmount.value)).toFixed(2)
 })
 
 const calculateFuncs = computed(() => {
 subTotalCompute.value
+discountCompute.value
 taxCompute.value
 paymentSurchargeCompute.value
 totalAmountCompute.value
+postInvoiceData()
 })
 
 const priceFundamentalCalculate = computed(() => {
@@ -247,8 +282,18 @@ calculateFuncs.value
 
 // const applyCoupon = () => Inertia.post("/coupon", {coupon},{ preserveState:true })
 const applyCoupon = () => {
-  axios.post('/coupon',{coupon}).then(response => {
+  const data = {
+    coupon:coupon.value
+  }
+  axios.post('/coupon',data).then(response => {
       discount.value = response.data.discount
+      if(discount.value == 0){
+        couponError.value = "Invalid Coupon Code"
+      }else{
+        couponError.value = null
+        discountType.value = response.data.type
+      }
+
       calculateFuncs.value
     });
 }
@@ -262,11 +307,27 @@ const postProdQuant = (product_id) => {
     price: price.value[product_id]
 
   }
-  axios.post('/updateInvoiceDetail',data).then(response => {
+  axios.post('/update_invoice_detail',data).then(response => {
       
-    });
+  });
 }
+const postInvoiceData = () => {
+  //invoiceDetailId, prodId, InvoiceId, Quantity, Price
+ 
 
+  const data = {
+    invoice_id:invoice.id,
+    subTotal:subTotal.value,
+    discount: discountAmount.value,
+    taxAmount:taxAmount.value,
+    surchargeAmount:paymentSurchargeAmount.value,
+    totalAmount:totalAmount.value
+
+  }
+  axios.post('/update_invoice',data).then(response => {
+      
+  });
+}
 
 
 const increaseQuantity = (id) => {
@@ -310,7 +371,7 @@ if (props.invoice ) {
   Object.assign(invoice, props.invoice);
   window.sessionStorage.setItem('invoice', JSON.stringify(invoice))
 
-  closeDialog();
+  closeLeadDialog();
 
 }
 })
@@ -318,18 +379,17 @@ watch(() => props.invoice, () => {
   saveInvoiceToSession.value
 })
 
-const showModal = ref(false)
-    function closeDialog() {
-      showModal.value = false;
+    function closeLeadDialog() {
+      showLeadModal.value = false;
     }
 
-    function openDialog() {
-      showModal.value = true;
+    function openLeadDialog() {
+      showleadModal.value = true;
     }
     onMounted(() => {
        const lead = JSON.parse(window.sessionStorage.getItem("invoice"));
       if(lead == null){
-        openDialog();
+        openLeadDialog();
       }
       if (lead) {
         Object.assign(invoice, lead);

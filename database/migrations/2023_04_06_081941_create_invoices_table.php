@@ -12,22 +12,23 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('invoices', function (Blueprint $table) {
-            $table->increments('invoice_no');
+            $table->increments('id');
             $table->string('client_name');
             $table->string('company')->nullable();
             $table->string('email');
             $table->string('phone');
             $table->string('address')->nullable();            
-            $table->unsignedSmallInteger('no_of_items')->nullable();
-            $table->unsignedSmallInteger('sub_total')->nullable();
-            $table->unsignedSmallInteger('discount')->nullable();
-            $table->unsignedSmallInteger('tax')->nullable();
-            $table->unsignedSmallInteger('payment_surcharge')->nullable();
-            $table->unsignedSmallInteger('total')->nullable();
-            $table->unsignedSmallInteger('paid_amount')->nullable();
-            $table->unsignedSmallInteger('payment_method')->nullable();
-            $table->unsignedSmallInteger('payment_details')->nullable();
-            $table->unsignedSmallInteger('payment_status')->nullable();
+            $table->unsignedDecimal('no_of_items',8,2)->default('0');
+            $table->unsignedDecimal('sub_total',8,2)->default('0');
+            $table->unsignedDecimal('discount',8,2)->default('0');
+            $table->unsignedDecimal('tax',8,2)->default('0');
+            $table->unsignedDecimal('payment_surcharge',8,2)->default('0');
+            $table->unsignedDecimal('total',8,2)->default('0');
+            $table->unsignedDecimal('paid_amount',8,2)->default('0');
+            $table->string('payment_method')->nullable();
+            $table->string('payment_id')->nullable();            
+            $table->string('payment_details')->nullable();
+            $table->string('payment_status')->nullable();
             $table->timestamps();
         });
     }

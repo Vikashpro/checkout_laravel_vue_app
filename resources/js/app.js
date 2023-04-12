@@ -3,6 +3,7 @@ import { createInertiaApp } from '@inertiajs/inertia-vue3'
 import MainLayout from './Layouts/MainLayout.vue'
 import '../css/app.css'
 
+
 createInertiaApp({
   resolve: async (name) => {
     const pages = import.meta.glob('./Pages/**/*.vue')

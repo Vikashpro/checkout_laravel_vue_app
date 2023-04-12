@@ -42,12 +42,16 @@ class DiscountController extends Controller
 
 if ($discountCoupon) {
 
-    $discountPrice = $discountCoupon->discount;
+    $discount = $discountCoupon->discount;
+    $discountType = $discountCoupon->type;
+    return response()->json(["discount"=>$discount, "type"=>$discountType]);
+
 } else {
-    $discountPrice = 0;
+    $discount = 0;
+    return response()->json(["discount"=>$discount]);
+
 }
 
-        return response()->json(["discount"=>$discountPrice]);
     }
 
     /**

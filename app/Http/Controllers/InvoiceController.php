@@ -98,9 +98,43 @@ class InvoiceController extends Controller
             $record->price = $price;
             $record->save();
         }
-        return response()->json(["message"=>"quantity with price update successfully"]);
+        return response()->json(["message"=>"quantity with price updated successfully"]);
+    }
+
+    public function updateInvoice(Request $request)
+    {
+       
+    
+        $invoice = Invoice::find($request->invoice_id);
+        $invoice->sub_total=$request->subTotal;
+        $invoice->discount =$request->discount;
+        $invoice->tax =$request->taxAmount;
+        $invoice->payment_surcharge =$request->surchargeAmount;
+        $invoice->total =$request->totalAmount;
+        $invoice->save();
+        return response()->json(["message"=>"invoice updated successfully"]);
     }
    
+    public function updateInvoiceLead(Request $request)
+    {
+       
+    
+        $invoice = Invoice::find($request->id);
+        $request->validate([
+            'client_name' => 'required',
+            'email' => 'required|email',
+            'phone' => 'required',
+        ]);
+        $invoice->client_name = $request->client_name;
+        $invoice->company = $request->company;
+        $invoice->email = $request->email;
+        $invoice->phone = $request->phone;
+        $invoice->address = $request->address;
+        $invoice->payment_method = $request->payment_method;
+        $invoice->payment_status = $request->payment_status;
+        $invoice->save();
+        return response()->json(["message"=>"invoice updated successfully"]);
+    }
 
     /**
      * Remove the specified resource from storage.

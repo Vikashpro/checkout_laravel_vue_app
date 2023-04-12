@@ -1,6 +1,6 @@
 <template>
     <Box>
-        <p>Payment Successfull! you can download your invoice. Thanks! </p>
+        <p>Thank you, shortly you will receive an email with course login details. You can download your invoice here! </p>
     </Box>
 </template>
 <script setup>

@@ -5,6 +5,7 @@ use App\Models\Invoice;
 use App\Models\InvoiceDetail;
 use Illuminate\Http\Request;
 use App\Models\Product;
+use Dompdf\Dompdf;
 class InvoiceController extends Controller
 {
     /**
@@ -113,6 +114,24 @@ class InvoiceController extends Controller
         $invoice->total =$request->totalAmount;
         $invoice->save();
         return response()->json(["message"=>"invoice updated successfully"]);
+    }
+
+    public function generateInvoice(Request $request)
+    {
+       
+    
+        $invoice = Invoice::find($request->id);
+        $html = view('pdf/invoice', ['invoice' => $invoice])->render();
+
+        // Create a new instance of Dompdf and load the HTML
+        $pdf = new Dompdf();
+        $pdf->loadHtml($html);
+    
+        // Render the PDF
+        $pdf->render();
+    
+        // Return the PDF contents as a response
+        return response()->json(['pdfUrl' => 'data:application/pdf;base64,' . base64_encode($pdf->output())]);
     }
    
     public function updateInvoiceLead(Request $request)

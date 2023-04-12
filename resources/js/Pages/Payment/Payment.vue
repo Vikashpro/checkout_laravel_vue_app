@@ -161,6 +161,15 @@ const handleSubmit = async (e) => {
         })
     }
   });
+  }else{
+    axios.post('/generate_invoice', { invoice_id: form.id })
+        .then(response => {
+          // Open the PDF in a new tab
+          window.open(response.data.pdfUrl);
+        })
+        .catch(error => {
+          console.error(error);
+        });
   }
 
 

@@ -139,7 +139,7 @@
 
 <Teleport to="body">
   <!-- use the modal component, pass in the prop -->
-  <modal :show="showLeadModal">
+  <modal :show="showLeadModal" >
     <template #body>
       <InvoiceCreate/>
     </template>
@@ -209,7 +209,6 @@ if(paymentMethod.value=='e'){
 }else{
   paymentSurchargeRate.value = import.meta.env.VITE_MIX_PAYMENT_SURCHARGE_RATE;
 }
-console.log("payment " + paymentSurchargeRate.value);
 calculateFuncs.value
 })
 const discountCompute = computed(() => {
@@ -384,7 +383,7 @@ watch(() => props.invoice, () => {
     }
 
     function openLeadDialog() {
-      showleadModal.value = true;
+      showLeadModal.value = true;
     }
     onMounted(() => {
        const lead = JSON.parse(window.sessionStorage.getItem("invoice"));

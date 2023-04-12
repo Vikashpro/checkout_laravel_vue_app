@@ -23,6 +23,8 @@ Route::post('/invoice/store', [InvoiceController::class, 'store']);
 Route::post('/update_invoice_detail', [InvoiceController::class,'updateInvoiceDetail']);
 Route::post('/update_invoice', [InvoiceController::class,'updateInvoice']);
 Route::post('/update_lead', [InvoiceController::class,'updateInvoiceLead']);
+Route::post('/generate_invoice', [InvoiceController::class,'generateInvoice']);
+
 //Stripe payment method integration
 Route::post('payment/initiate', [StripeController::class, 'initiatePayment']);
 Route::post('payment/complete', [StripeController::class, 'completePayment']);

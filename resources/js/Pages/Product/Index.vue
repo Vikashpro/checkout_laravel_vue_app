@@ -119,7 +119,7 @@
     <label for="bordered-radio-2" class="w-full py-4 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Pay With Interac E-Transfer</label>
 </div>
 
-        <button @click="showPaymentModal=true" class="btn-primary" >Proceed<span v-if="paymentMethod=='card'"> to Payment</span></button>
+        <button @click="showPaymentModal=true" :disabled="parseInt(totalAmount) === 0" class="btn-primary" >Proceed<span v-if="paymentMethod=='card'"> to Payment</span></button>
        </Box>
       <Box>
         <h3 class="text-base font-semibold leading-6 text-gray-900">Apply Coupon</h3>
@@ -185,8 +185,8 @@ const couponError = ref(null)
 const taxRate = import.meta.env.VITE_MIX_TAX_RATE
 const taxAmount = ref(0)
 const paymentSurchargeRate = ref(import.meta.env.VITE_MIX_PAYMENT_SURCHARGE_RATE)
-const paymentSurchargeAmount = ref(0)
-const totalAmount = ref(0)
+const paymentSurchargeAmount = ref(0.00)
+const totalAmount = ref(0.00)
 const coupon = ref(null)
 const paymentMethod = ref('card')
 const showLeadModal = ref(false)

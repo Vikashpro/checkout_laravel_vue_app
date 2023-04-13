@@ -6,6 +6,8 @@ use App\Models\InvoiceDetail;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use Dompdf\Dompdf;
+use Illuminate\Support\Facades\DB;
+
 class InvoiceController extends Controller
 {
     /**
@@ -119,8 +121,14 @@ class InvoiceController extends Controller
     public function generateInvoice(Request $request)
     {
        
-    
-        $invoice = Invoice::find($request->id);
+        $invoice = Invoice::with(['invoiceDetail'=>function ($query) {
+            $query->where('quantity', '>', 0);
+                }, 'invoiceDetail.product'])
+            ->where('id', $request->invoice_id)->get();
+        $invoice = $invoice[0];
+
+        // return response()->json(["invoice"=>$invoice]);
+
         $html = view('pdf/invoice', ['invoice' => $invoice])->render();
 
         // Create a new instance of Dompdf and load the HTML

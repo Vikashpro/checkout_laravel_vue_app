@@ -13,11 +13,14 @@ return new class extends Migration
     {
         Schema::create('invoice_details', function (Blueprint $table) {
             $table->id();
-            $table->unsignedSmallInteger('invoice_id');
-            $table->unsignedSmallInteger('product_id');
+            $table->unsignedBigInteger('invoice_id');
+            $table->unsignedBigInteger('product_id');
             $table->unsignedSmallInteger('quantity');
             $table->unsignedSmallInteger('price');
             $table->timestamps();
+
+            $table->foreign('invoice_id')->references('id')->on('invoices');
+            $table->foreign('product_id')->references('id')->on('products');
         });
     }
 

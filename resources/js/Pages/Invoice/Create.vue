@@ -18,20 +18,19 @@
         <label class="block mb-1 text-gray-500 dark:text-gray-300 font-medium">Address</label>
         <input v-model="form.address" type="text" class="block w-full p-2 rounded-md shadow-sm border border-gray-300 dark:border-gray-600 text-gray-500" />
       </div>
-      <div class="col-span-6">
+      <div class="col-span-3">
         <label class="block mb-1 text-gray-500 dark:text-gray-300 font-medium">email</label>
         <input v-model="form.email" type="text" class="block w-full p-2 rounded-md shadow-sm border border-gray-300 dark:border-gray-600 text-gray-500" />
         <div v-if="form.errors.email" class="input-error">
           {{ form.errors.email }}
         </div>
-      </div>
-      <div class="col-span-6">
+        </div>
+      <div class="col-span-3">
         <label class="block mb-1 text-gray-500 dark:text-gray-300 font-medium">Phone</label>
         <input v-model="form.phone" type="text" class="block w-full p-2 rounded-md shadow-sm border border-gray-300 dark:border-gray-600 text-gray-500" />
         <div v-if="form.errors.phone" class="input-error">
           {{ form.errors.phone }}
         </div>
-       
       </div>
       <div class="col-span-6">
         <button type="submit" class="btn-primary">Create</button>

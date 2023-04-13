@@ -127,6 +127,9 @@
         <div v-if="couponError" class="input-error">
           {{ couponError }}
         </div>
+        <div v-if="discount>0" class="success">
+          Discount Code Applied!
+        </div>
         <button @click="applyCoupon()" class=" mt-4 btn-primary">Apply</button>
       </Box>
 
@@ -203,11 +206,13 @@ subTotal.value = price.value[0] + price.value[1]
 })
 
 const changePaymentMethod = computed(() => {
-if(paymentMethod.value=='e'){
-  paymentSurchargeRate.value = 0
+if(paymentMethod.value=='card'){
+  paymentSurchargeRate.value = import.meta.env.VITE_MIX_PAYMENT_SURCHARGE_RATE;
+
 
 }else{
-  paymentSurchargeRate.value = import.meta.env.VITE_MIX_PAYMENT_SURCHARGE_RATE;
+  paymentSurchargeRate.value = 0
+
 }
 calculateFuncs.value
 })
@@ -227,6 +232,7 @@ paymentSurchargeAmount.value = ((subTotal.value - discountAmount.value+ taxAmoun
 })
 
 const totalAmountCompute = computed(() => {
+
 totalAmount.value = (subTotal.value - discountAmount.value +taxAmount.value+parseFloat(paymentSurchargeAmount.value)).toFixed(2)
 })
 
@@ -288,9 +294,11 @@ const applyCoupon = () => {
       discount.value = response.data.discount
       if(discount.value == 0){
         couponError.value = "Invalid Coupon Code"
+        coupon.value = null
       }else{
         couponError.value = null
         discountType.value = response.data.type
+        coupon.value = null
       }
 
       calculateFuncs.value

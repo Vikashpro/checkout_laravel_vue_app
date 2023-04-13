@@ -12,7 +12,7 @@ use Stripe\Stripe as StripeGateway;
 
 class StripeController extends Controller
 {
-    //
+    // 
 
     public function initiatePayment(Request $request){
     StripeGateway::setApiKey(env('STRIPE_SECRET_KEY'));  //
@@ -41,24 +41,28 @@ class StripeController extends Controller
 }
 
 public function completePayment(Request $request)
-{
-    // $stripe = new StripeClient(env('STRIPE_SECRET_KEY'));
+{   if($request->payment_id){
+    $stripe = new StripeClient(env('STRIPE_SECRET_KEY'));
 
-    // // Use the payment intent ID stored when initiating payment
-    // $paymentDetail = $stripe->paymentIntents->retrieve($request->payment_id);
+    // Use the payment intent ID stored when initiating payment
+    $paymentDetail = $stripe->paymentIntents->retrieve($request->payment_id);
 
-    // if ($paymentDetail->status != 'succeeded') {
-    //     // throw error
-    //     return response()->json(["payment status"=>$paymentDetail->status]);
+    if ($paymentDetail->status != 'succeeded') {
+        // throw error
+        return response()->json(["payment status"=>$paymentDetail->status]);
 
-    // }
+    }
 
-    // $invoice = Invoice::find($request->invoice_id);
-    // $invoice->payment_id = $request->payment_id;
-    // $invoice->payment_status = 'Paid';
-    // $invoice->save();
-    return inertia('Payment/PaymentSuccess');
+    $invoice = Invoice::find($request->invoice_id);
+    $invoice->payment_id = $request->payment_id;
+    $invoice->payment_status = 'Paid';
+    $invoice->save();
+    return inertia('Payment/PaymentSuccess', ['invoice_id'=>$request->invoice_id, 'payment_method'=> 'card']);
 
+    }
+    return inertia('Payment/PaymentSuccess', ['invoice_id'=>$request->invoice_id, 'payment_method'=> null]);
+
+   
 
     // Complete the payment
 }

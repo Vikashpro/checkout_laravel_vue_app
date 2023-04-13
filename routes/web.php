@@ -27,7 +27,7 @@ Route::post('/update_lead', [InvoiceController::class,'updateInvoiceLead']);
 Route::post('/generate_invoice', [InvoiceController::class,'generateInvoice']);
 
 
-Route::get('/admin', [DashboardController::class, 'index']);
+Route::get('/dashboard/invoice', [DashboardController::class, 'index']);
 
 //Stripe payment method integration
 Route::post('payment/initiate', [StripeController::class, 'initiatePayment']);

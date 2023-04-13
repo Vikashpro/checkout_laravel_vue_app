@@ -1,19 +1,19 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Product;
-use Illuminate\Http\Request;
 
-class ProductController extends Controller
+use Illuminate\Http\Request;
+use App\Models\Invoice;
+
+class DashboardController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
-    { 
+    {
         // 
-        return inertia('Product/Index',['products'=>Product::all()]);
-   
+        return inertia('Dashboard/Index',['invoices'=>Invoice::all()]);
     }
 
     /**
@@ -22,7 +22,6 @@ class ProductController extends Controller
     public function create()
     {
         //
-        
     }
 
     /**

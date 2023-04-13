@@ -5,6 +5,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\StripeController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +25,9 @@ Route::post('/update_invoice_detail', [InvoiceController::class,'updateInvoiceDe
 Route::post('/update_invoice', [InvoiceController::class,'updateInvoice']);
 Route::post('/update_lead', [InvoiceController::class,'updateInvoiceLead']);
 Route::post('/generate_invoice', [InvoiceController::class,'generateInvoice']);
+
+
+Route::get('/admin', [DashboardController::class, 'index']);
 
 //Stripe payment method integration
 Route::post('payment/initiate', [StripeController::class, 'initiatePayment']);

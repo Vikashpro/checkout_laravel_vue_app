@@ -1,5 +1,12 @@
 <template>
-    <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl mb-6 sm:tracking-tight">Invoices</h2>
+  <div class="flex">
+    <div class="grow"><h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl mb-6 sm:tracking-tight">Invoices</h2>
+    </div>
+    <div >
+   
+      <logout />
+    </div>
+  </div>
 
    <div class="flex flex-col-reverse md:grid md:grid-cols-12 gap-4 ">
     <div class="md:col-span-12 ">
@@ -57,7 +64,11 @@
   <script setup>
 import Box from '@/Components/UI/Box.vue'
 import Invoice from '@/Components/Invoice.vue'
+import Logout from '@/Pages/Auth/Logout.vue'
+import { Link, usePage } from '@inertiajs/inertia-vue3'
 
+const page = usePage()
+// const route = useRoute()
   defineProps({
       invoices: Array,
   })

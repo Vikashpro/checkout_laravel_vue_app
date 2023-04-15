@@ -6,6 +6,11 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
+use Aacotroneo\Saml2\Events\Saml2LoginEvent;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use App\Models\User;
+
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -26,6 +31,31 @@ class EventServiceProvider extends ServiceProvider
     public function boot(): void
     {
         //
+
+        Event::listen('Aacotroneo\Saml2\Events\Saml2LoginEvent', function (Saml2LoginEvent $event) {
+            $messageId = $event->getSaml2Auth()->getLastMessageId();
+            // Add your own code preventing reuse of a $messageId to stop replay attacks
+        
+            $user = $event->getSaml2User();
+            $userData = [
+                'id' => $user->getUserId(),
+                'attributes' => $user->getAttributes(),
+                'assertion' => $user->getRawSamlAssertion()
+            ];
+               
+                if ($userData['id']) {
+                    $email = $userData['id'];
+                    $user = new User;
+                    $user->email = $email;
+                    $user->save();
+                   }
+
+
+                   
+                   //I want to store the email in the db User model
+                
+                
+        });
     }
 
     /**

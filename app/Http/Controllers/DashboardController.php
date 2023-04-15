@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Invoice;
+use App\Models\User;
+
 
 class DashboardController extends Controller
 {
@@ -13,7 +15,25 @@ class DashboardController extends Controller
     public function index()
     {
         // 
-        return inertia('Dashboard/Index',['invoices'=>Invoice::all()]);
+        $user = User::get()->first();
+
+        if ($user == null && session('user')== null){
+           return redirect('login');
+           
+        }
+        if ($user != null && session('user')== null){
+            session(['user' => $user->email]);
+           
+        }
+       
+        if($user){
+            User::truncate();
+        }
+
+
+        // session()->flush();
+        
+        return inertia('Dashboard/Index',['invoices'=>Invoice::all(),'email'=>session()->all()]);
     }
 
     /**

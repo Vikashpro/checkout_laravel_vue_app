@@ -12,7 +12,8 @@ class ProductController extends Controller
     public function index()
     { 
         // 
-        return inertia('Product/Index',['products'=>Product::all()]);
+       
+        return inertia('Product/Index',['products'=>Product::all(),'session'=>session()->all()]);
    
     }
 
@@ -22,6 +23,7 @@ class ProductController extends Controller
     public function create()
     {
         //
+        
         
     }
 

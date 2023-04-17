@@ -11,10 +11,11 @@ class ProductController extends Controller
      */
     public function index()
     { 
-        // 
-       
-        return inertia('Product/Index',['products'=>Product::all(),'session'=>session()->all()]);
-   
+        return inertia('Product/Index',['products'=>Product::where('checkout_page','course')->get()]);
+    }
+    public function all_products()
+    {
+        return inertia('Product/AllProducts', ['products'=>Product::all()]);
     }
 
     /**
@@ -26,6 +27,10 @@ class ProductController extends Controller
         
         
     }
+    public function product_checkout(){
+        return inertia('Product/ProductCheckout',['products'=>Product::where('checkout_page','product')->get()]);
+
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -33,6 +38,19 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate([
+            'name' => 'required',
+            'price' => 'required|Integer',
+        ]);
+        $product = new Product();
+        $product->name = $request->name;
+        $product->price = $request->price;
+        $product->description = $request->description;
+        $product->checkout_page = $request->checkout_page;
+        $product->save();
+
+        return inertia('Product/AllProducts', ['products'=>Product::all()])->with('success','Product created successfully');
+
     }
 
     /**

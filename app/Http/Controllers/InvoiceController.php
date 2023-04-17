@@ -49,15 +49,21 @@ class InvoiceController extends Controller
         $invoice->save();
         // response()->json(['message' => 'Data saved successfully', 'invoice'=>$invoice]);
         // return response()->json(['id' => $invoice->id]);
-          return  inertia('Product/Index',['invoice'=>$invoice, 'products'=>Product::all()])->with('success','Lead added Successfully');
+        return  inertia('Product/Index',['invoice'=>$invoice, 'products'=>Product::all()])->with('success','Lead added Successfully');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
         //
+        $invoice = Invoice::with(['invoiceDetail'=>function ($query) {
+            $query->where('quantity', '>', 0);
+                }, 'invoiceDetail.product'])
+            ->where('id', $id)->get();
+            return  inertia('Invoice/Edit',['invoice'=>$invoice[0]]);
+
     }
 
     /**
@@ -71,10 +77,36 @@ class InvoiceController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
-        //
+        $invoice = Invoice::find($request->data['id']);
+        $invoice->client_name = $request->data['client_name'];
+        $invoice->company = $request->data['company']; 
+        $invoice->address = $request->data['address'];
+        $invoice->email = $request->data['email']; 
+        $invoice->phone = $request->data['phone']; 
+        $invoice->sub_total = $request->data['sub_total']; 
+        $invoice->discount = $request->data['discount']; 
+        $invoice->tax = $request->data['tax']; 
+        $invoice->payment_surcharge = $request->data['payment_surcharge']; 
+        $invoice->total = $request->data['total']; 
+        $invoice->paid_amount = $request->data['paid_amount']; 
+        $invoice->payment_method = $request->data['payment_method']; 
+        $invoice->payment_id = $request->data['payment_id']; 
+        $invoice->payment_status = $request->data['payment_status'];
+         $invoice->save();
+
+        foreach ($request->data['invoice_detail'] as $invoice_detail) {
+            $inv_d = InvoiceDetail::find($invoice_detail['id']);
+            $inv_d->quantity = $invoice_detail['quantity'];
+            $inv_d->price = $invoice_detail['price'];
+            $inv_d->save();
+        }
+    return  inertia('Dashboard/Index',['invoices'=>Invoice::all()]);
+    
+
     }
+ 
     public function updateInvoiceDetail(Request $request)
     {
         $invoice_id = $request->invoice_id;

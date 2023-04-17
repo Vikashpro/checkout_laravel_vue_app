@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Invoice;
-use App\Models\User;
+use App\Models\User; 
 
 
 class DashboardController extends Controller
@@ -31,9 +31,8 @@ class DashboardController extends Controller
         }
 
 
-        // session()->flush();
         
-        return inertia('Dashboard/Index',['invoices'=>Invoice::all(),'email'=>session()->all()]);
+        return inertia('Dashboard/Index',['invoices'=>Invoice::all()]);
     }
 
     /**
@@ -50,14 +49,16 @@ class DashboardController extends Controller
     public function store(Request $request)
     {
         //
+
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
         //
+      
     }
 
     /**

@@ -20,12 +20,29 @@ use Illuminate\Http\RedirectResponse;
 */
 Route::group(['middleware' => 'auth.user'], function () {
     // ...
+    Route::get('/all_products', [ProductController::class, 'all_products'])->name('all_products');
+    Route::post('/store_product', [ProductController::class, 'store'])->name('store_product');
+    Route::get('/discount',[DiscountController::class, 'index'])->name('discount');
+    Route::post('/discount',[DiscountController::class, 'store'])->name('discount');
+    Route::get('/invoice/{id}', [InvoiceController::class, 'show'])->name('invoice.show');
+    Route::post('/edit_invoice', [InvoiceController::class, 'update'])->name('invoice.update');
 
 });
 
+Route::fallback(function () {
+    return redirect('/');
+});
+
+//Products Routes
 Route::get('/', [ProductController::class, 'index']);
-Route::get('/discount/Index',[DiscountController::class, 'index']);
+Route::get('/product_checkout', [ProductController::class, 'product_checkout']);
+
+
+//Discounts Routes
+
 Route::post('/coupon', [DiscountController::class, 'show']);
+
+//Invoice Routes
 Route::post('/invoice/store', [InvoiceController::class, 'store']);
 Route::post('/update_invoice_detail', [InvoiceController::class,'updateInvoiceDetail']);
 Route::post('/update_invoice', [InvoiceController::class,'updateInvoice']);

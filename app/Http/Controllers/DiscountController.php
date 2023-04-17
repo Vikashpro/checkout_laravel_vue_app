@@ -13,7 +13,8 @@ class DiscountController extends Controller
      */
     public function index()
     {
-        inertia('Discount/Index', DiscountCoupon::all());
+
+        return inertia('Discount/Index',["discounts"=>DiscountCoupon::all()]);
     }
 
     /**
@@ -30,6 +31,24 @@ class DiscountController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate([
+            'coupon' => 'required',
+            'discount' => 'required|Integer',
+            'type' => 'required',
+            'validity' => 'required',
+            
+        ]);
+        $validity = trim($request->validity);
+        $discount = new DiscountCoupon();
+        $discount->coupon = $request->coupon;
+        $discount->discount = $request->discount;
+        $discount->type = $request->type;
+        $discount->validity = Carbon::parse($validity)->format('Y-m-d');
+        // $discount->validity = Carbon::createFromFormat('Y-m-d',$validity)->toDateTimeString();
+        $discount->save();
+
+        return inertia('Discount/Index', ['discounts'=>DiscountCoupon::all()])->with('success','Discount created successfully');
+
     }
 
     /**

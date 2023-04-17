@@ -1,11 +1,10 @@
 <template>
-  <div class="flex">
-    <div class="grow"><h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl mb-6 sm:tracking-tight">Invoices</h2>
+  <div class="flex gap-8">
+    <div class="grow "><h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl mb-6 sm:tracking-tight">Invoices</h2>
     </div>
-    <div >
-   
-      <logout />
-    </div>
+    <div > <Link :href="'/all_products'" class=" font-medium">Products </Link> </div>
+    <div > <Link :href="'/discount'" class=" font-medium">Discount </Link> </div>
+    <div > <logout /></div>
   </div>
 
    <div class="flex flex-col-reverse md:grid md:grid-cols-12 gap-4 ">
@@ -51,7 +50,10 @@
       <Box v-for="invoice in invoices" :key="invoice.id">
      <div class="grid grid-cols-10 divide-x">
        <Invoice :invoice="invoice" />
-       <div class="text-center">Edit</div>
+       <div class="text-center">
+     <Link :href="`/invoice/${invoice.id}`" class="btn-outline font-medium">Edit </Link> 
+
+       </div>
       </div>
 
         </Box>

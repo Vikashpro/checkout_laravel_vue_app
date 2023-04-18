@@ -51,7 +51,8 @@
      <div class="grid grid-cols-10 divide-x">
        <Invoice :invoice="invoice" />
        <div class="text-center">
-     <Link :href="`/invoice/${invoice.id}`" class="btn-outline font-medium">Edit </Link> 
+        <Link :href="`/invoice/${invoice.id}`" class="btn-outline  font-medium">Edit </Link> 
+        <button @click="downloadInvoice(invoice.id)" class="btn-outline  ml-2 font-medium">pdf </button> 
 
        </div>
       </div>
@@ -68,12 +69,41 @@ import Box from '@/Components/UI/Box.vue'
 import Invoice from '@/Components/Invoice.vue'
 import Logout from '@/Pages/Auth/Logout.vue'
 import { Link, usePage } from '@inertiajs/inertia-vue3'
+import axios from 'axios';
 
 const page = usePage()
 // const route = useRoute()
   defineProps({
       invoices: Array,
   })
+
+  const downloadInvoice2 = (id) =>{
+    axios.post('/generate_invoice', { invoice_id: id })
+    .then(response => {
+      window.open(response.data.pdfUrl);
+    })
+    .catch(error => {
+      console.error(error);
+    });
+  }
+const downloadInvoice = (id) => {
+  axios.post('/generate_invoice', { invoice_id: id }, { responseType: 'blob' })
+    .then(response => {
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'invoice.pdf');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    })
+    .catch(error => {
+      console.error(error);
+    });
+}
+
+
+
   </script>
   
   

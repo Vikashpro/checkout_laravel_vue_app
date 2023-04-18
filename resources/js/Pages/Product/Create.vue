@@ -57,7 +57,7 @@ const form = useForm({
     const create = () => {
         form.post('/store_product',{
         preserveState:true
-})
+}) 
 form.reset()
 }
 

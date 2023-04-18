@@ -128,7 +128,7 @@ const submitForm = async () => {
     
     if (response.data.errors) {
       throw new Error('Form submission failed.');
-    }
+    } 
     
   } catch (error) {
     if (error && error.response) {

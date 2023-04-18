@@ -15,16 +15,19 @@ const props = defineProps({
   payment_method: String,
 })
 const generate_invoice = () =>{
-
-
-axios.post('/generate_invoice', { invoice_id: props.invoice_id })
-        .then(response => {
-          // Open the PDF in a new tab
-          window.open(response.data.pdfUrl);
-        })
-        .catch(error => {
-          console.error(error);
-        });
+  axios.post('/generate_invoice', { invoice_id: props.invoice_id }, { responseType: 'blob' })
+    .then(response => {
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'invoice.pdf');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    })
+    .catch(error => {
+      console.error(error);
+    });
 }
 
 onMounted(() => {

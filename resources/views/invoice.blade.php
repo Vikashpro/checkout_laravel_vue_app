@@ -329,20 +329,12 @@ h6{
          <tr class="c16">
             <td class="c15" colspan="1" rowspan="1">
             <p class="c8">
-                @if($invoice->invoiceDetail[0]->product->checkout_page=="course")
-                <span class="c2">COURSE</span>
-                @elseif($invoice->invoiceDetail[0]->product->checkout_page=="product")
-                <span class="c2">Product</span>
-                @endif
+               <span class="c2">Product</span>
             </p>
             </td>
             <td class="c6" colspan="1" rowspan="1">
                <p class="c8">
-            @if($invoice->invoiceDetail[0]->product->checkout_page=="course")
-                <span class="c2">NUMBER OF USERS</span>
-                @elseif($invoice->invoiceDetail[0]->product->checkout_page=="product")
                 <span class="c2">QUANTITY</span>
-                @endif
                 </p>
             </td>
             <td class="c7" colspan="1" rowspan="1">

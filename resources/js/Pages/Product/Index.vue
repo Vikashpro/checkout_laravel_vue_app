@@ -144,7 +144,7 @@
   <!-- use the modal component, pass in the prop -->
   <modal :show="showLeadModal" >
     <template #body>
-      <InvoiceCreate/>
+      <InvoiceCreate @hide-lead-modal="hideLeadModal"/>
     </template>
   </modal>
 </Teleport>
@@ -168,14 +168,13 @@ import Modal from '@/Components/UI/Modal.vue'
 import InvoiceCreate from '@/Pages/Invoice/Create.vue'
 import Payment from '@/Pages/Payment/Payment.vue'
 
-import { ref, reactive, onMounted, watch,  computed} from 'vue';
+import { ref, reactive, onMounted,  computed} from 'vue';
 import axios from 'axios';
 
  
  
 const props = defineProps({
   products: Array,
-  invoice: Object,
 })
 const invoice = reactive(Object.create(null));
 const quantity = ref([0,0])
@@ -200,10 +199,19 @@ const showPaymentModal = ref(false)
 const hidePaymentModal = () =>{
  showPaymentModal.value = false
 }
+const hideLeadModal = () =>{
+  const lead = JSON.parse(window.sessionStorage.getItem("invoice"));
+      if (lead) {
+        Object.assign(invoice, lead);
+        showLeadModal.value = false
+
+      }
+
+}
 const subTotalCompute = computed(() => {
 subTotal.value = price.value[0] + price.value[1]
 
-})
+}) 
 
 const changePaymentMethod = computed(() => {
 if(paymentMethod.value=='card'){
@@ -279,7 +287,7 @@ price.value[1] = quantity.value[1]*69
 }else if(quantity.value[1]>5 && quantity.value[1]<=10){
 price.value[1] = quantity.value[1]*59
 }else if(quantity.value[1]>=11){
-price.value[1] = quantity.value[1]*49
+price.value[1] = quantity.value[1]*49 
 }
 
 calculateFuncs.value
@@ -373,23 +381,6 @@ postProdQuant(id)
 
     
 
- const saveInvoiceToSession = computed(() => {
-if (props.invoice ) {
-  Object.assign(invoice, props.invoice);
-  window.sessionStorage.setItem('invoice', JSON.stringify(invoice))
-
-  closeLeadDialog();
-
-}
-})
-watch(() => props.invoice, () => {
-  saveInvoiceToSession.value
-})
-
-    function closeLeadDialog() {
-      showLeadModal.value = false;
-    }
-
     function openLeadDialog() {
       showLeadModal.value = true;
     }
@@ -402,9 +393,6 @@ watch(() => props.invoice, () => {
         Object.assign(invoice, lead);
       }
 })
-// watch(() =>  () => {
-//     saveInvoiceToSession.value
-//   })
 
 
 </script>

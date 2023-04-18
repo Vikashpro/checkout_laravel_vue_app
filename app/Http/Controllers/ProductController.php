@@ -28,7 +28,15 @@ class ProductController extends Controller
         
     }
     public function product_checkout(){
-        return inertia('Product/ProductCheckout',['products'=>Product::where('checkout_page','product')->get()]);
+        $products = Product::where('checkout_page','product')->get();
+        $products = $products->map(function ($product) {
+            $product->quantity = 0;
+            $product->pr = 0; // or any other value you want to set
+            return $product;
+        });
+        
+        
+        return inertia('Product/ProductCheckout',['products'=>$products]);
 
     }
 

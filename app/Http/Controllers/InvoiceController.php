@@ -5,8 +5,12 @@ use App\Models\Invoice;
 use App\Models\InvoiceDetail;
 use Illuminate\Http\Request;
 use App\Models\Product;
+use PDF;
 use Dompdf\Dompdf;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Response;
+
 
 class InvoiceController extends Controller
 {
@@ -47,9 +51,8 @@ class InvoiceController extends Controller
         $invoice->phone = $request->phone;
         $invoice->address = $request->address;
         $invoice->save();
-        // response()->json(['message' => 'Data saved successfully', 'invoice'=>$invoice]);
-        // return response()->json(['id' => $invoice->id]);
-        return  inertia('Product/Index',['invoice'=>$invoice, 'products'=>Product::all()])->with('success','Lead added Successfully');
+         return response()->json(['invoice' => $invoice]);
+        // return  inertia('Product/Index',['invoice'=>$invoice, 'products'=>Product::all()])->with('success','Lead added Successfully');
     }
 
     /**
@@ -159,21 +162,23 @@ class InvoiceController extends Controller
             ->where('id', $request->invoice_id)->get();
         $invoice = $invoice[0];
 
-        // return response()->json(["invoice"=>$invoice]);
+        $html = view('invoice', ['invoice' => $invoice])->render();
 
-        $html = view('pdf/invoice', ['invoice' => $invoice])->render();
-
-        // Create a new instance of Dompdf and load the HTML
         $pdf = new Dompdf();
         $pdf->loadHtml($html);
     
-        // Render the PDF
         $pdf->render();
     
-        // Return the PDF contents as a response
-        return response()->json(['pdfUrl' => 'data:application/pdf;base64,' . base64_encode($pdf->output())]);
-    }
+        $output = $pdf->output();
+        $headers = [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename="invoice.pdf"'
+        ];
+    
+        return response()->make($output, 200, $headers);
+  }
    
+        
     public function updateInvoiceLead(Request $request)
     {
        

@@ -25,6 +25,7 @@ Route::group(['middleware' => 'auth.user'], function () {
     Route::get('/discount',[DiscountController::class, 'index'])->name('discount');
     Route::post('/discount',[DiscountController::class, 'store'])->name('discount');
     Route::get('/invoice/{id}', [InvoiceController::class, 'show'])->name('invoice.show');
+    Route::post('/send_email', [InvoiceController::class, 'sendEmail'])->name('invoice.sendEmail');
     Route::post('/edit_invoice', [InvoiceController::class, 'update'])->name('invoice.update');
 
 });
@@ -48,6 +49,7 @@ Route::post('/update_invoice_detail', [InvoiceController::class,'updateInvoiceDe
 Route::post('/update_invoice', [InvoiceController::class,'updateInvoice']);
 Route::post('/update_lead', [InvoiceController::class,'updateInvoiceLead']);
 Route::post('/generate_invoice', [InvoiceController::class,'generateInvoice']);
+Route::get('/show_invoice/{id}', [InvoiceController::class,'show_invoice'])->name('show_invoice');
 
 
 Route::get('/dashboard/invoice', [DashboardController::class, 'index'])->name('dashboard/invoice');

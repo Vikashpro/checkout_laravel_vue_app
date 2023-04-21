@@ -329,12 +329,20 @@ h6{
          <tr class="c16">
             <td class="c15" colspan="1" rowspan="1">
             <p class="c8">
+                @if($invoice->invoiceDetail[0]->product->checkout_page=="course")
+               <span class="c2">Course</span>
+               @else
                <span class="c2">Product</span>
+                @endif
             </p>
             </td>
             <td class="c6" colspan="1" rowspan="1">
                <p class="c8">
-                <span class="c2">QUANTITY</span>
+               @if($invoice->invoiceDetail[0]->product->checkout_page=="course")
+               <span class="c2">No. Of Users</span>
+               @else
+               <span class="c2">Quantity</span>
+                @endif
                 </p>
             </td>
             <td class="c7" colspan="1" rowspan="1">
@@ -350,7 +358,7 @@ h6{
                <p class="c10"><span class="c2">{{$detail->quantity}}</span></p>
             </td>
             <td class="c7" colspan="1" rowspan="1">
-               <p class="c10"><span class="c2">{{$detail->price}}</span></p>
+               <p class="c10"><span class="c2">${{$detail->price}}</span></p>
             </td>
          </tr>
          @endforeach
@@ -367,15 +375,15 @@ h6{
                <p class="c5"><span class="c2">DISCOUNT AMOUNT</span></p>
             </td>
             <td class="c7" colspan="1" rowspan="1">
-               <p class="c10"><span class="c2">{{$invoice->discount}}</span></p>
+               <p class="c10"><span class="c2">${{$invoice->discount}}</span></p>
             </td>
          </tr>
          <tr class="c11">
             <td class="c0" colspan="2" rowspan="1">
-               <p class="c5"><span class="c2">TAX ({{env("VITE_MIX_TAX_RATE")}}%)</span></p>
-            </td>
+               <p class="c5"><span class="c2">{{env("VITE_MIX_TAX_NAME")}} ({{env("VITE_MIX_TAX_RATE")}}%)</span></p>
+            </td> 
             <td class="c7" colspan="1" rowspan="1">
-               <p class="c10"><span class="c2">{{$invoice->tax}}</span></p>
+               <p class="c10"><span class="c2">${{$invoice->tax}}</span></p>
             </td>
          </tr>
          @if($invoice->payment_surcharge > 0)
@@ -384,16 +392,16 @@ h6{
                <p class="c5"><span class="c2">PAYMENT SURCHARGE AMOUNT</span></p>
             </td>
             <td class="c7" colspan="1" rowspan="1">
-               <p class="c10"><span class="c2">{{$invoice->payment_surcharge}}</span></p>
+               <p class="c10"><span class="c2">${{$invoice->payment_surcharge}}</span></p>
             </td>
          </tr>
          @endif
          <tr class="c11">
             <td class="c0" colspan="2" rowspan="1">
-               <p class="c5"><span class="c2">TOTAL AMOUNT</span></p>
+               <p class="c5"><span class="c2">TOTAL AMOUNT CAD</span></p>
             </td>
             <td class="c7" colspan="1" rowspan="1">
-               <p class="c10"><span class="c2">{{$invoice->total}}</span></p>
+               <p class="c10"><span class="c2">${{$invoice->total}}</span></p>
             </td>
          </tr>
          <tr class="c11">
@@ -415,9 +423,14 @@ h6{
       </table>
       <p class="c4 c9"><span class="c2"></span></p>
       <p class="c4 c9"><span class="c3"></span></p>
-      @if($invoice->payment_method != "card")
+  
+      @if($invoice->payment_method != "card" && $invoice->invoiceDetail[0]->product->checkout_page=="course" )
       <p class="c4"><span class="c3">NOTE:</span></p>
       <p class="c13"><span class="c3">Send an Interac E-Transfer to office@example.org (AUTODEPOSIT, no security question required). You MUST specify the above invoice number in the memo/message of the E-Transfer OR YOUR COURSE ACCESS CANNOT BE DELIVERED (no refunds). By specifying the invoice number we know to send you the login information for the course. After E Transfer is received on our end, you will receive an email with the course login.</span></p>
+      <p class="c4 c9"><span class="c14"></span></p>
+      @elseif($invoice->payment_method != "card")
+      <p class="c4"><span class="c3">NOTE:</span></p>
+      <p class="c13"><span class="c3">Send an Interac E-Transfer to office@example.org (AUTODEPOSIT, no security question required). You MUST specify the above invoice number in the memo/message of the E-Transfer or your purchase cannot be delivered (no refunds).</span></p>
       <p class="c4 c9"><span class="c14"></span></p>
       @endif
    </body>

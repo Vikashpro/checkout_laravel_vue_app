@@ -71,7 +71,7 @@
         <div>
         </div>
         <div class="text-center">
-          <h3 class="text-base font-semibold leading-6 text-gray-900">Tax ({{ taxRate }}%)</h3>
+          <h3 class="text-base font-semibold leading-6 text-gray-900">{{ taxName }} ({{ taxRate }}%)</h3>
       </div>
 
         <div class="text-center">
@@ -185,6 +185,7 @@ const discountAmount = ref(0)
 const discountType = ref(null)
 const couponError = ref(null)
 const taxRate = import.meta.env.VITE_MIX_TAX_RATE
+const taxName = import.meta.env.VITE_MIX_TAX_NAME
 const taxAmount = ref(0)
 const paymentSurchargeRate = ref(import.meta.env.VITE_MIX_PAYMENT_SURCHARGE_RATE)
 const paymentSurchargeAmount = ref(0.00)

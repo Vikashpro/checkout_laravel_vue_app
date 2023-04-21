@@ -3,7 +3,7 @@
     <div class="container mx-auto">
       <nav class="p-4 flex items-center justify-between">
         <div class="text-xl text-indigo-600 dark:text-indigo-300 font-bold text-center">
-          Courses
+         APP Title
         </div>
       </nav>
     </div>

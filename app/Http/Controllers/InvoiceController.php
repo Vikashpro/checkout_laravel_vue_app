@@ -10,7 +10,9 @@ use Dompdf\Dompdf;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Response;
+use Mail;
 
+  
 
 class InvoiceController extends Controller
 {
@@ -161,7 +163,6 @@ class InvoiceController extends Controller
                 }, 'invoiceDetail.product'])
             ->where('id', $request->invoice_id)->get();
         $invoice = $invoice[0];
-
         $html = view('invoice', ['invoice' => $invoice])->render();
 
         $pdf = new Dompdf();
@@ -177,8 +178,36 @@ class InvoiceController extends Controller
     
         return response()->make($output, 200, $headers);
   }
-   
-        
+  public function show_invoice($id)
+{
+    $invoice = Invoice::with(['invoiceDetail'=>function ($query) {
+        $query->where('quantity', '>', 0);
+    }, 'invoiceDetail.product'])
+    ->where('id', $id)
+    ->get()[0];
+
+    $html = view('invoice', ['invoice' => $invoice])->render();
+
+    $pdf = new Dompdf();
+    $pdf->loadHtml($html);
+    $pdf->render();
+    $pdfData = $pdf->output();
+
+    $response = new \Symfony\Component\HttpFoundation\StreamedResponse(function() use ($pdfData) {
+        echo $pdfData;
+    }, 200, [
+        'Content-Type' => 'application/pdf',
+        'Content-Disposition' => 'attachment; filename="invoice.pdf"',
+    ]);
+    
+    return Response::stream(function() use ($pdfData) {
+        echo $pdfData;
+    }, 200, [
+        'Content-Type' => 'application/pdf',
+        'Content-Disposition' => 'attachment; filename="invoice.pdf"',
+    ]);
+}
+    
     public function updateInvoiceLead(Request $request)
     {
        
@@ -207,4 +236,32 @@ class InvoiceController extends Controller
     {
         //
     }
+
+    public function sendEmail(Request $request)
+{
+
+    $invoice = Invoice::with(['invoiceDetail'=>function ($query) {
+        $query->where('quantity', '>', 0);
+    }, 'invoiceDetail.product'])
+    ->where('id', $request->invoice_id)
+    ->get()[0];
+    $data["email"] = $invoice->email;
+    $data["title"] = env('MAIL_TITLE');
+    $dompdf = new Dompdf();
+    $dompdf->loadHtml(view('invoice', ['invoice' => $invoice])->render());
+    $dompdf->setPaper('A4', 'portrait');
+    $dompdf->render();
+    $pdf = $dompdf->output();
+ 
+    // Attach PDF to email
+    Mail::send([], [], function ($message) use ($data, $pdf) {
+        $message->to($data["email"])
+            ->subject($data["title"])
+            ->attachData($pdf, 'invoice.pdf', [
+                'mime' => 'application/pdf',
+            ]);
+    });
+    
+    return Response()->json(["message"=>"email send successfully"]);
+}
 }

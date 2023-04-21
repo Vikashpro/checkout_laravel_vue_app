@@ -42,17 +42,14 @@ class EventServiceProvider extends ServiceProvider
                 'attributes' => $user->getAttributes(),
                 'assertion' => $user->getRawSamlAssertion()
             ];
-               
                 if ($userData['id']) {
                     $email = $userData['id'];
                     $user = new User;
                     $user->email = $email;
                     $user->save();
                    }
+ 
 
-
-                   
-                   //I want to store the email in the db User model
                 
                 
         });

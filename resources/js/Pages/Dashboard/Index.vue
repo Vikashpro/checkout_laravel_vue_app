@@ -50,18 +50,27 @@
       <Box v-for="invoice in invoices" :key="invoice.id">
      <div class="grid grid-cols-10 divide-x">
        <Invoice :invoice="invoice" />
-       <div class="text-center">
-        <Link :href="`/invoice/${invoice.id}`" class="btn-outline  font-medium">Edit </Link> 
+       <section>      
+         <div class="flex items-center gap-1  text-gray-600 dark:text-gray-300">
+        <Link :href="`/invoice/${invoice.id}`" class="btn-outline  ml-4 font-medium">Edit </Link> 
         <button @click="downloadInvoice(invoice.id)" class="btn-outline  ml-2 font-medium">pdf </button> 
-
        </div>
+       <div class="mt-2 ml-2">
+        <button @click="sendInvoiceInEmail(invoice.id)" class="btn-outline  ml-2 font-medium">Send Email </button> 
+</div>
+</section>
+
+       <!-- <div class="text-center">
+        <Link :href="`/invoice/${invoice.id}`" class="btn-outline  font-medium">Edit aldfj  </Link> 
+        <button @click="downloadInvoice(invoice.id)" class="btn-outline  ml-2 font-medium">pdf </button> 
+       </div> -->
       </div>
 
         </Box>
       </div>
       </div>
+  
       </div>
-      
   </template>
   
   <script setup>
@@ -71,21 +80,12 @@ import Logout from '@/Pages/Auth/Logout.vue'
 import { Link, usePage } from '@inertiajs/inertia-vue3'
 import axios from 'axios';
 
-const page = usePage()
 // const route = useRoute()
   defineProps({
       invoices: Array,
   })
 
-  const downloadInvoice2 = (id) =>{
-    axios.post('/generate_invoice', { invoice_id: id })
-    .then(response => {
-      window.open(response.data.pdfUrl);
-    })
-    .catch(error => {
-      console.error(error);
-    });
-  }
+ 
 const downloadInvoice = (id) => {
   axios.post('/generate_invoice', { invoice_id: id }, { responseType: 'blob' })
     .then(response => {
@@ -101,6 +101,16 @@ const downloadInvoice = (id) => {
       console.error(error);
     });
 }
+const sendInvoiceInEmail = (id) => {
+  axios.post('/send_email', { invoice_id: id })
+    .then(response => {
+      console.log(response.data.message); 
+    })
+    .catch(error => {
+      console.error(error);
+    });
+}
+
 
 
 

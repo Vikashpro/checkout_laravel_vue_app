@@ -8,14 +8,14 @@
     <Box>
         <div class="grid grid-cols-3 divide-x">
         <div>
-          <h3 class="text-base font-semibold leading-6 text-gray-900">Product Name</h3>
+          <h3 class="head3">Product Name</h3>
         </div>
         <div class="text-center">
-          <h3 class="text-base font-semibold leading-6 text-gray-900">Price</h3>
+          <h3 class="head3">Price</h3>
       </div>
 
         <div class="text-center">
-          <h3 class="text-base font-semibold leading-6 text-gray-900">Checkout Page</h3>
+          <h3 class="head3">Checkout Page</h3>
         </div>
       </div>
     </Box>

@@ -54,7 +54,6 @@ class InvoiceController extends Controller
         $invoice->address = $request->address;
         $invoice->save();
          return response()->json(['invoice' => $invoice]);
-        // return  inertia('Product/Index',['invoice'=>$invoice, 'products'=>Product::all()])->with('success','Lead added Successfully');
     }
 
     /**

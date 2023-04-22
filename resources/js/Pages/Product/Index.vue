@@ -8,14 +8,14 @@
     <Box>
         <div class="grid grid-cols-3 divide-x">
         <div>
-          <h3 class="text-base font-semibold leading-6 text-gray-900">Course Name</h3>
+          <h3 class="head3">Course Name</h3>
         </div>
         <div class="text-center">
-          <h3 class="text-base font-semibold leading-6 text-gray-900">No. of Users</h3>
+          <h3 class="head3">No. of Users</h3>
       </div>
 
         <div class="text-center">
-          <h3 class="text-base font-semibold leading-6 text-gray-900">Price</h3>
+          <h3 class="head3">Price</h3>
         </div>
       </div>
     </Box>
@@ -42,14 +42,14 @@
         <Box>
         <div class="grid grid-cols-3">
         <div>
-          <h3 class="text-base font-semibold leading-6 text-gray-900"></h3>
+          <h3 class="head3"></h3>
         </div>
         <div class="text-center">
-          <h3 class="text-base font-semibold leading-6 text-gray-900">SubTotal</h3>
+          <h3 class="head3">SubTotal</h3>
       </div>
 
         <div class="text-center">
-          <h3 class="text-base font-semibold leading-6 text-gray-900">${{ subTotal }}</h3>
+          <h3 class="head3">${{ subTotal }}</h3>
         </div>
       </div>
     </Box>
@@ -58,11 +58,11 @@
         <div>
         </div>
         <div class="text-center">
-          <h3 class="text-base font-semibold leading-6 text-gray-900">Discount <span v-if="discountType=='percent'">({{ discount }}%)</span></h3>
+          <h3 class="head3">Discount <span v-if="discountType=='percent'">({{ discount }}%)</span></h3>
       </div>
 
         <div class="text-center">
-          <h3 class="text-base font-semibold leading-6 text-gray-900">${{ discountAmount }}</h3>
+          <h3 class="head3">${{ discountAmount }}</h3>
         </div>
       </div>
     </Box>
@@ -71,11 +71,11 @@
         <div>
         </div>
         <div class="text-center">
-          <h3 class="text-base font-semibold leading-6 text-gray-900">{{ taxName }} ({{ taxRate }}%)</h3>
+          <h3 class="head3">{{ taxName }} ({{ taxRate }}%)</h3>
       </div>
 
         <div class="text-center">
-          <h3 class="text-base font-semibold leading-6 text-gray-900">${{ taxAmount }}</h3>
+          <h3 class="head3">${{ taxAmount }}</h3>
         </div>
       </div>
     </Box>
@@ -84,11 +84,11 @@
         <div>
         </div>
         <div class="text-center">
-          <h3 class="text-base font-semibold leading-6 text-gray-900">Credit Card Surcharge ({{ paymentSurchargeRate }}%)</h3>
+          <h3 class="head3">Credit Card Surcharge ({{ paymentSurchargeRate }}%)</h3>
       </div>
 
         <div class="text-center">
-          <h3 class="text-base font-semibold leading-6 text-gray-900">${{ paymentSurchargeAmount }}</h3>
+          <h3 class="head3">${{ paymentSurchargeAmount }}</h3>
         </div>
       </div>
     </Box>
@@ -97,10 +97,10 @@
         <div>
         </div>
         <div class="text-center">
-          <h3 class="text-base font-semibold leading-6 text-gray-900">Total Amount CAD</h3>
+          <h3 class="head3">Total Amount CAD</h3>
       </div>
         <div class="text-center">
-          <h3 class="text-base font-semibold leading-6 text-gray-900">${{ totalAmount }}</h3>
+          <h3 class="head3">${{ totalAmount }}</h3>
         </div>
       </div>
     </Box>
@@ -109,7 +109,7 @@
      </div>
      <div class="md:col-span-3 flex flex-col gap-4">
       <Box>
-        <h3 class="text-base font-semibold leading-6 text-gray-900">Payment Method</h3>
+        <h3 class="head3">Payment Method</h3>
         <div class="mt-4 flex items-center pl-4 border border-gray-200 rounded dark:border-gray-700">
          <input checked id="bordered-radio-1" type="radio" value="card" v-model="paymentMethod" @change="changePaymentMethod" name="bordered-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
           <label for="bordered-radio-1" class="w-full py-4 ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Pay with Credit, Debit</label>
@@ -122,8 +122,8 @@
         <button @click="showPaymentModal=true" :disabled="parseInt(totalAmount) === 0" class="btn-primary" >Proceed<span v-if="paymentMethod=='card'"> to Payment</span></button>
        </Box>
       <Box>
-        <h3 class="text-base font-semibold leading-6 text-gray-900">Apply Coupon</h3>
-        <input v-model="coupon" type="text" class="block w-full p-2 rounded-md shadow-sm border border-gray-300 dark:border-gray-600 text-gray-500" />
+        <h3 class="head3">Apply Coupon</h3>
+        <input v-model="coupon" type="text" class="input" />
         <div v-if="couponError" class="input-error">
           {{ couponError }}
         </div>

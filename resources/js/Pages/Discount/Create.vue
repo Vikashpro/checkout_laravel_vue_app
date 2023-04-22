@@ -5,15 +5,15 @@
         <div class="grid grid-cols-6 gap-4">
         
         <div class="col-span-6">
-        <label class="block mb-1 text-gray-500 dark:text-gray-300 font-medium"> Coupon</label>
-        <input v-model="form.coupon" type="text" class="block w-full p-2 rounded-md shadow-sm border border-gray-300 dark:border-gray-600 text-gray-500" />
+        <label class="label"> Coupon</label>
+        <input v-model="form.coupon" type="text" class="label" />
         <div v-if="form.errors.coupon" class="input-error">
           {{ form.errors.coupon }}
         </div>
       </div>
       <div class="col-span-6">
-        <label class="block mb-1 text-gray-500 dark:text-gray-300 font-medium">Discount</label>
-        <input v-model="form.discount" type="text" class="block w-full p-2 rounded-md shadow-sm border border-gray-300 dark:border-gray-600 text-gray-500" />
+        <label class="label">Discount</label>
+        <input v-model="form.discount" type="text" class="label" />
         <div v-if="form.errors.discount" class="input-error">
           {{ form.errors.discount }}
         </div>
@@ -22,8 +22,8 @@
     <div>
     </div>
       <div class="col-span-6">
-        <label class="block mb-1 text-gray-500 dark:text-gray-300 font-medium">Type</label>
-        <select v-model="form.type" class="block w-full p-2 rounded-md shadow-sm border border-gray-300 dark:border-gray-600 text-gray-500">
+        <label class="label">Type</label>
+        <select v-model="form.type" class="label">
   <option disabled value="">select type</option>
   <option value="amount">amount</option>
   <option value="percent">percent</option>
@@ -33,8 +33,8 @@
         </div>
      </div>
      <div class="col-span-6">
-        <label class="block mb-1 text-gray-500 dark:text-gray-300 font-medium">Validity</label>
-        <Datepicker v-model="form.validity"  class="block w-full p-2 rounded-md shadow-sm border border-gray-300 dark:border-gray-600 text-gray-500" />
+        <label class="label">Validity</label>
+        <Datepicker v-model="form.validity"  class="label" />
         <div v-if="form.errors.validity" class="input-error">
           {{ form.errors.validity }}
         </div>

@@ -39,7 +39,7 @@
     
       <div class="col-span-3">
     <label class="label">Product Name</label>
-    <select v-model="form.invoice_detail[index].product_id" :disabled="form.invoice_detail[index].product!=null" class="block w-full p-2 rounded-md shadow-sm border border-gray-300 dark:border-gray-600 text-gray-500">
+    <select v-model="form.invoice_detail[index].product_id" :disabled="form.invoice_detail[index].product!=null" class="input">
   <option disabled value="">select checkout page</option>
   <option v-for="product in products" :key="product.id" :value="product.id" >{{ product.name }}</option>
 
@@ -106,7 +106,7 @@
     </div>
     <div class="col-span-3">
       <label class="label">Payment_method</label>
-      <select v-model="form.payment_method" @change="changePaymentMethod" class="block w-full p-2 rounded-md shadow-sm border border-gray-300 dark:border-gray-600 text-gray-500">
+      <select v-model="form.payment_method" @change="changePaymentMethod" class="input">
   <option disabled value="">select payment method</option>
   <option value="card">Card</option>
   <option value="E Transfer">E Transfer</option>
@@ -121,7 +121,7 @@
     </div>
     <div class="col-span-3">
       <label class="label">Payment Status</label>
-      <select v-model="form.payment_status" class="block w-full p-2 rounded-md shadow-sm border border-gray-300 dark:border-gray-600 text-gray-500">
+      <select v-model="form.payment_status" class="input">
   <option disabled value="">select payment status</option>
   <option value="Paid">Paid</option>
   <option value="Pending">Pending</option>

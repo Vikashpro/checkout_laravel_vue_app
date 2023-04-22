@@ -9,30 +9,30 @@
       <div class="grid grid-cols-6 gap-4">
         
         <div class="col-span-6">
-        <label class="block mb-1 text-gray-500 dark:text-gray-300 font-medium">Full Name</label>
-        <input v-model="form.client_name" type="text" class="block w-full p-2 rounded-md shadow-sm border border-gray-300 dark:border-gray-600 text-gray-500" />
+        <label class="label">Full Name</label>
+        <input v-model="form.client_name" type="text" class="input" />
         <div v-if="form.errors.client_name" class="input-error">
           {{ form.errors.client_name }}
         </div>
       </div>
       <div class="col-span-6">
-        <label class="block mb-1 text-gray-500 dark:text-gray-300 font-medium">Company</label>
-        <input v-model="form.company" type="text" class="block w-full p-2 rounded-md shadow-sm border border-gray-300 dark:border-gray-600 text-gray-500" />
+        <label class="label">Company</label>
+        <input v-model="form.company" type="text" class="input" />
       </div>
       <div class="col-span-6">
-        <label class="block mb-1 text-gray-500 dark:text-gray-300 font-medium">Address</label>
-        <input v-model="form.address" type="text" class="block w-full p-2 rounded-md shadow-sm border border-gray-300 dark:border-gray-600 text-gray-500" />
+        <label class="label">Address</label>
+        <input v-model="form.address" type="text" class="input" />
       </div>
         <div class="col-span-3">
-        <label class="block mb-1 text-gray-500 dark:text-gray-300 font-medium">email</label>
-        <input v-model="form.email" type="text" class="block w-full p-2 rounded-md shadow-sm border border-gray-300 dark:border-gray-600 text-gray-500" />
+        <label class="label">email</label>
+        <input v-model="form.email" type="text" class="input" />
         <div v-if="form.errors.email" class="input-error">
           {{ form.errors.email }}
         </div>
         </div>
       <div class="col-span-3">
-        <label class="block mb-1 text-gray-500 dark:text-gray-300 font-medium">Phone</label>
-        <input v-model="form.phone" type="text" class="block w-full p-2 rounded-md shadow-sm border border-gray-300 dark:border-gray-600 text-gray-500" />
+        <label class="label">Phone</label>
+        <input v-model="form.phone" type="text" class="input" />
         <div v-if="form.errors.phone" class="input-error">
           {{ form.errors.phone }}
         </div>

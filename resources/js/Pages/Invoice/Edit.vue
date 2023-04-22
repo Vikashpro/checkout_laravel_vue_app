@@ -39,7 +39,12 @@
     
       <div class="col-span-3">
     <label class="label">Product Name</label>
-      <input v-model="form.invoice_detail[index].product.name" disabled="true" type="text" class="input" />
+    <select v-model="form.invoice_detail[index].product_id" :disabled="form.invoice_detail[index].product!=null" class="block w-full p-2 rounded-md shadow-sm border border-gray-300 dark:border-gray-600 text-gray-500">
+  <option disabled value="">select checkout page</option>
+  <option v-for="product in products" :key="product.id" :value="product.id" >{{ product.name }}</option>
+
+</select>
+      <!-- <input v-model="form.invoice_detail[index].product.name" disabled="true" type="text" class="input" /> -->
   </div>
         <div class="col-span-3">
     <label class="label">Quantity</label>
@@ -47,7 +52,11 @@
   </div>
     <div class="col-span-3">
     <label class="label" >Price</label>
-      <input v-model="form.invoice_detail[index].price" type="text" class="input" />
+    <div class="flex flex-nowrap">
+      <input v-model="form.invoice_detail[index].price" @change="subTotalCompute" type="text" class="input" />
+      <button @click="deleteProd(index)" type="button" class="btn-outline  ml-2 font-medium"><font-awesome-icon icon="fa-solid fa-trash" /></button>
+      <button class="btn-outline  ml-2 font-medium" v-if="index==form.invoice_detail.length-1" @click="form.invoice_detail.push({})"><font-awesome-icon icon="fa-solid fa-cart-shopping" /></button>
+    </div>
   </div>
 </div>
 
@@ -62,20 +71,20 @@
     </div>
     <div class="col-span-3">
       <label class="label">Discount Amount</label>
-      <input v-model="form.discount" type="text" class="input" />
+      <input v-model="form.discount" @change="calculate" type="text" class="input" />
       <div v-if="form.errors.discount" class="input-error">
         {{ form.errors.discount }}
       </div>
     </div>
     <div class="col-span-3">
-      <label class="label">tax</label>
+      <label class="label">{{ taxName }} ({{ taxRate }}%)</label>
       <input v-model="form.tax" type="text" class="input" />
       <div v-if="form.errors.tax" class="input-error">
         {{ form.errors.tax }}
       </div>
     </div>
     <div class="col-span-3">
-      <label class="label">Payment Surcharge Amount</label>
+      <label class="label">Payment Card Surcharge ({{ paymentSurchargeRate }}%)</label>
       <input v-model="form.payment_surcharge" type="text" class="input" />
       <div v-if="form.errors.payment_surcharge" class="input-error">
         {{ form.errors.payment_surcharge }}
@@ -97,7 +106,7 @@
     </div>
     <div class="col-span-3">
       <label class="label">Payment_method</label>
-      <select v-model="form.payment_method" class="block w-full p-2 rounded-md shadow-sm border border-gray-300 dark:border-gray-600 text-gray-500">
+      <select v-model="form.payment_method" @change="changePaymentMethod" class="block w-full p-2 rounded-md shadow-sm border border-gray-300 dark:border-gray-600 text-gray-500">
   <option disabled value="">select payment method</option>
   <option value="card">Card</option>
   <option value="E Transfer">E Transfer</option>
@@ -106,7 +115,7 @@
     <div class="col-span-3">
       <label class="label">Payment ID</label>
       <input v-model="form.payment_id" type="text" class="input" />
-      <div v-if="form.errors.payment_id" class="input-error">
+    <div v-if="form.errors.payment_id" class="input-error">
         {{ form.errors.payment_id }}
       </div>
     </div>
@@ -127,27 +136,84 @@
   <script setup>
  
 import { useForm} from '@inertiajs/inertia-vue3'
-import { reactive, onMounted } from 'vue'
+import { reactive,ref, onMounted, computed } from 'vue'
 import { Inertia } from '@inertiajs/inertia'
+import axios from 'axios';
+
+
 
 const props = defineProps({
   invoice: Object,
 })
 
+const taxRate = import.meta.env.VITE_MIX_TAX_RATE
+const taxName = import.meta.env.VITE_MIX_TAX_NAME
+const paymentSurchargeRate = ref(import.meta.env.VITE_MIX_PAYMENT_SURCHARGE_RATE)
+const products = ref([])
+const deletedProducts = ref([]);
 
+const deleteProd = (index) => {
+  const prod = form.invoice_detail[index];
+
+  if(prod.id != undefined){
+   deletedProducts.value.push(prod);
+  }
+  form.invoice_detail.splice(index, 1)
+  subTotalCompute.value
+}
   const form = useForm({})
   // const update = () => form.post("/edit_invoice")
   const update = () =>{
-      const data = form;
+
+      const data = {
+        deleteItems: deletedProducts.value,
+          invoice:form,
+      }
     Inertia.post("/edit_invoice", {
           data
         })
   }
+  const subTotalCompute = computed(() => {
+  form.sub_total = form.invoice_detail.reduce((total, item) => total + parseFloat(item.price), 0)
+  calculate.value
+})
 
+const taxCompute = computed(() => {
+form.tax = (form.sub_total- form.discount)*taxRate/100
+})
+const changePaymentMethod = computed(() => {
+if(form.payment_method=='card'){
+  paymentSurchargeRate.value = import.meta.env.VITE_MIX_PAYMENT_SURCHARGE_RATE
+}else{
+  paymentSurchargeRate.value = 0.00
+}
+calculate.value
+})
+const paymentSurchargeCompute = computed(() => {
+    form.payment_surcharge = ((form.sub_total - form.discount+ form.tax )*paymentSurchargeRate.value/100).toFixed(2)
+})
+const totalAmountCompute = computed(() => {
+form.total = (form.sub_total - form.discount +form.tax+parseFloat(form.payment_surcharge)).toFixed(2)
+})
+const calculate = computed(() => {
+  taxCompute.value
+  paymentSurchargeCompute.value
+  totalAmountCompute.value
+})
+const getProducts = () => {
+  axios.get('/getProducts')
+        .then(response => {
+          products.value = response.data.products
+        })
+        .catch(error => {
+          console.log(error)
+        })
 
+}
   onMounted(() => {
-   
-      Object.assign(form, props.invoice);
+      getProducts()
+      Object.assign(form, props.invoice)
+      changePaymentMethod.value
     
 })
 </script>

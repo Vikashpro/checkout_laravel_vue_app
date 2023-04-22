@@ -21,6 +21,7 @@ use Illuminate\Http\RedirectResponse;
 Route::group(['middleware' => 'auth.user'], function () {
     // ...
     Route::get('/all_products', [ProductController::class, 'all_products'])->name('all_products');
+    Route::get('/getProducts', [ProductController::class, 'getProducts'])->name('getProducts');
     Route::post('/store_product', [ProductController::class, 'store'])->name('store_product');
     Route::get('/discount',[DiscountController::class, 'index'])->name('discount');
     Route::post('/discount',[DiscountController::class, 'store'])->name('discount');
@@ -60,11 +61,11 @@ Route::post('payment/complete', [StripeController::class, 'completePayment']);
 
 //Auth Controller 
 Route::get('/login', function () {
-    return redirect('/saml2/test/login');
+    return redirect('/saml2/sso/login');
 })->name('login');
 Route::get('/logout', function () {
     session()->flush();
-    return redirect('/saml2/test/logout');
+    return redirect('/saml2/sso/logout');
 })->name('logout');
 //  Route::get('login', [AuthController::class, 'create'])->name('login');
 Route::post('login', [AuthController::class,'store'])->name('login/store');

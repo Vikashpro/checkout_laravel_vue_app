@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('invoice_id');
             $table->unsignedBigInteger('product_id');
             $table->unsignedSmallInteger('quantity');
-            $table->unsignedSmallInteger('price');
+            $table->unsignedDecimal('price',8,2);
             $table->timestamps();
 
             $table->foreign('invoice_id')->references('id')->on('invoices');

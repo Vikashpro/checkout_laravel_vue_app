@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('description');
-            $table->unsignedInteger('price');
-            $table->string('checkout_page');
+            $table->string('description')->nullable();
+            $table->unsignedDecimal('price',8,2);
+            $table->string('checkout_page')->nullable();
             $table->timestamps();
         });
     }

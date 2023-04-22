@@ -83,31 +83,48 @@ class InvoiceController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request)
-    {
-        $invoice = Invoice::find($request->data['id']);
-        $invoice->client_name = $request->data['client_name'];
-        $invoice->company = $request->data['company']; 
-        $invoice->address = $request->data['address'];
-        $invoice->email = $request->data['email']; 
-        $invoice->phone = $request->data['phone']; 
-        $invoice->sub_total = $request->data['sub_total']; 
-        $invoice->discount = $request->data['discount']; 
-        $invoice->tax = $request->data['tax']; 
-        $invoice->payment_surcharge = $request->data['payment_surcharge']; 
-        $invoice->total = $request->data['total']; 
-        $invoice->paid_amount = $request->data['paid_amount']; 
-        $invoice->payment_method = $request->data['payment_method']; 
-        $invoice->payment_id = $request->data['payment_id']; 
-        $invoice->payment_status = $request->data['payment_status'];
+    {   $deleteItems = $request->data['deleteItems'];
+        foreach ($deleteItems as $item) {
+            $del = InvoiceDetail::find($item['id']);
+            $del->delete();
+        }
+        $inv = $request->data['invoice'];
+        $invoice = Invoice::find($inv['id']);
+        $invoice->client_name = $inv['client_name'];
+        $invoice->company = $inv['company']; 
+        $invoice->address = $inv['address'];
+        $invoice->email = $inv['email']; 
+        $invoice->phone = $inv['phone']; 
+        $invoice->sub_total = $inv['sub_total']; 
+        $invoice->discount = $inv['discount']; 
+        $invoice->tax = $inv['tax']; 
+        $invoice->payment_surcharge = $inv['payment_surcharge']; 
+        $invoice->total = $inv['total']; 
+        $invoice->paid_amount = $inv['paid_amount']; 
+        $invoice->payment_method = $inv['payment_method']; 
+        $invoice->payment_id = $inv['payment_id']; 
+        $invoice->payment_status = $inv['payment_status'];
          $invoice->save();
 
-        foreach ($request->data['invoice_detail'] as $invoice_detail) {
-            $inv_d = InvoiceDetail::find($invoice_detail['id']);
-            $inv_d->quantity = $invoice_detail['quantity'];
-            $inv_d->price = $invoice_detail['price'];
-            $inv_d->save();
+        foreach ($inv['invoice_detail'] as $invoice_detail) {
+            if(array_key_exists('id', $invoice_detail)){
+                $inv_d = InvoiceDetail::find($invoice_detail['id']);
+                $inv_d->quantity = $invoice_detail['quantity'];
+                $inv_d->price = $invoice_detail['price'];
+                $inv_d->save();
+            }else if(array_key_exists('product_id', $invoice_detail) && array_key_exists('quantity', $invoice_detail) && array_key_exists('price', $invoice_detail)){
+                if($invoice_detail['product_id'] != null && $invoice_detail['quantity'] != null && $invoice_detail['price'] != null){
+                    InvoiceDetail::create([
+                        'invoice_id' => $inv['id'],
+                        'product_id' => $invoice_detail['product_id'],
+                        'quantity' => $invoice_detail['quantity'],
+                        'price' => $invoice_detail['price']
+                    ]);
+                }
+            }
+           
         }
-    return  inertia('Dashboard/Index',['invoices'=>Invoice::all()]);
+     return  inertia('Dashboard/Index',['invoices'=>Invoice::all()]);
     
 
     }
@@ -262,6 +279,6 @@ class InvoiceController extends Controller
             ]);
     });
     
-    return Response()->json(["message"=>"email send successfully"]);
+    return Response()->json(["message"=>"email sent"]);
 }
 }

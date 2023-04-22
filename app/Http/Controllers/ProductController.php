@@ -39,6 +39,9 @@ class ProductController extends Controller
         return inertia('Product/ProductCheckout',['products'=>$products]);
 
     }
+    public function getProducts(){
+        return response()->json(['products'=>Product::all()]);
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -48,7 +51,7 @@ class ProductController extends Controller
         //
         $request->validate([
             'name' => 'required',
-            'price' => 'required|Integer',
+            'price' => 'required',
         ]);
         $product = new Product();
         $product->name = $request->name;

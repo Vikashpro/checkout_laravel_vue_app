@@ -56,7 +56,7 @@
         <button @click="downloadInvoice(invoice.id)" class="btn-outline  ml-2 font-medium">pdf </button> 
        </div>
        <div class="mt-2 ml-2">
-        <button @click="sendInvoiceInEmail(invoice.id)" class="btn-outline  ml-2 font-medium">Send Email </button> 
+        <button @click="sendInvoiceInEmail(invoice.id)" :disabled="emailDisabled" class="btn-outline  ml-2 font-medium">Send Email </button> 
 </div>
 </section>
 
@@ -78,8 +78,10 @@ import Box from '@/Components/UI/Box.vue'
 import Invoice from '@/Components/Invoice.vue'
 import Logout from '@/Pages/Auth/Logout.vue'
 import { Link, usePage } from '@inertiajs/inertia-vue3'
+import { createToast } from 'mosha-vue-toastify'
+import 'mosha-vue-toastify/dist/style.css'
 import axios from 'axios';
-
+import {ref} from 'vue'
 // const route = useRoute()
   defineProps({
       invoices: Array,
@@ -101,10 +103,13 @@ const downloadInvoice = (id) => {
       console.error(error);
     });
 }
+const emailDisabled = ref(false)
 const sendInvoiceInEmail = (id) => {
+  emailDisabled.value = true
   axios.post('/send_email', { invoice_id: id })
     .then(response => {
-      console.log(response.data.message); 
+      createToast(response.data.message)
+      emailDisabled.value = false
     })
     .catch(error => {
       console.error(error);

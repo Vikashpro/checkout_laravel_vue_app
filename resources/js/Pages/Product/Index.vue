@@ -254,11 +254,11 @@ totalAmountCompute.value
 postInvoiceData()
 })
 
-const priceFundamentalCalculate = computed(() => {
+const priceFundamentalCalculate = computed(() => { //function to calculate the price of the Fundamental Course
 
-  if(quantity.value[0]===0){
-  price.value[0] = 0
- }else if(quantity.value[0]===1){
+  if(quantity.value[0]==0){
+  price.value[0] = 0              //when the quantity is zero, the price will be zero and the conditions goes on...
+ }else if(quantity.value[0]==1){
   price.value[0] = 299
  }else if(quantity.value[0]>1 && quantity.value[0]<=3){
   price.value[0] = quantity.value[0]*209
@@ -275,12 +275,12 @@ calculateFuncs.value
 
 })
 
-const priceAdministratorCalculate = computed(() => {
+const priceAdministratorCalculate = computed(() => { //function to calculate the price of Administrator Course
 
 if(quantity.value[1]==0){
-price.value[1] = 0
+price.value[1] = 0        //when the quantity is zero price will be zero & the condition goes on
 }else if(quantity.value[1]==1){
-price.value[1] = 89
+price.value[1] = 89       
 }else if(quantity.value[1]>1 && quantity.value[1]<=3){
 price.value[1] = quantity.value[1]*79
 }else if(quantity.value[1]>3 && quantity.value[1]<=5){
@@ -294,8 +294,7 @@ price.value[1] = quantity.value[1]*49
 calculateFuncs.value
 })
 
-// const applyCoupon = () => Inertia.post("/coupon", {coupon},{ preserveState:true })
-const applyCoupon = () => {
+const applyCoupon = () => {        
   const data = {
     coupon:coupon.value
   }
@@ -315,7 +314,6 @@ const applyCoupon = () => {
 }
 
 const postProdQuant = (product_id) => {
-  //invoiceDetailId, prodId, InvoiceId, Quantity, Price
   const data = {
     invoice_id:invoice.id,
     product_id:product_id+1,
@@ -328,9 +326,6 @@ const postProdQuant = (product_id) => {
   });
 }
 const postInvoiceData = () => {
-  //invoiceDetailId, prodId, InvoiceId, Quantity, Price
- 
-
   const data = {
     invoice_id:invoice.id,
     subTotal:subTotal.value,
@@ -381,7 +376,7 @@ postProdQuant(id)
 
 
     
-
+ 
     function openLeadDialog() {
       showLeadModal.value = true;
     }

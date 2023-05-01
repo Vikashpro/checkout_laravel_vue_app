@@ -23,8 +23,8 @@ Route::group(['middleware' => 'auth.user'], function () {
     Route::get('/all_products', [ProductController::class, 'all_products'])->name('all_products');
     Route::get('/getProducts', [ProductController::class, 'getProducts'])->name('getProducts');
     Route::post('/store_product', [ProductController::class, 'store'])->name('store_product');
-    Route::get('/discount',[DiscountController::class, 'index'])->name('discount');
-    Route::post('/discount',[DiscountController::class, 'store'])->name('discount');
+    Route::get('/discount',[DiscountController::class, 'index'])->name('discount.index');
+    Route::post('/discount',[DiscountController::class, 'store'])->name('discount.store');
     Route::get('/invoice/{id}', [InvoiceController::class, 'show'])->name('invoice.show');
     Route::post('/send_email', [InvoiceController::class, 'sendEmail'])->name('invoice.sendEmail');
     Route::post('/edit_invoice', [InvoiceController::class, 'update'])->name('invoice.update');

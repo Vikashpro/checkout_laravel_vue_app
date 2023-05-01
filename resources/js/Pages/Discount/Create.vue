@@ -6,14 +6,14 @@
         
         <div class="col-span-6">
         <label class="label"> Coupon</label>
-        <input v-model="form.coupon" type="text" class="label" />
+        <input v-model="form.coupon" type="text" class="input" />
         <div v-if="form.errors.coupon" class="input-error">
           {{ form.errors.coupon }}
         </div>
       </div>
       <div class="col-span-6">
         <label class="label">Discount</label>
-        <input v-model="form.discount" type="text" class="label" />
+        <input v-model="form.discount" type="text" class="input" />
         <div v-if="form.errors.discount" class="input-error">
           {{ form.errors.discount }}
         </div>
@@ -23,7 +23,7 @@
     </div>
       <div class="col-span-6">
         <label class="label">Type</label>
-        <select v-model="form.type" class="label">
+        <select v-model="form.type" class="input">
   <option disabled value="">select type</option>
   <option value="amount">amount</option>
   <option value="percent">percent</option>
@@ -34,7 +34,7 @@
      </div>
      <div class="col-span-6">
         <label class="label">Validity</label>
-        <Datepicker v-model="form.validity"  class="label" />
+        <Datepicker v-model="form.validity"  class="input" />
         <div v-if="form.errors.validity" class="input-error">
           {{ form.errors.validity }}
         </div>
